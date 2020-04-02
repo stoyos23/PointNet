@@ -1,0 +1,23 @@
+﻿@using PointNet.Web.ViewModels.Catalog
+@model List<ProductViewModel>
+
+@{
+    ViewData["Title"] = "ListProductsInCategory";
+}
+
+<h1>ListProductsInCategory</h1>
+
+<div class="container">
+    <div class="row">
+        @{
+            foreach (var product in Model)
+            {
+                <div class="col-sm-6 col-md-6 col-lg-4">
+                    <a class="thumbnail" asp-controller="Catalog" asp-action="CarAdDetails" asp-route-id="@product.Id">
+                        <img src="@product.ImageUrl" alt="@product.Title" class="img-fluid" />
+                    </a>
+                </div>
+            }
+        }
+    </div>
+</div>

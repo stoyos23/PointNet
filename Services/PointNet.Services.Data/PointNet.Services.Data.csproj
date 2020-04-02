@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\PointNet.Data.Common\PointNet.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\PointNet.Data.Models\PointNet.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Web\PointNet.Web.ViewModels\PointNet.Web.ViewModels.csproj" />
     <ProjectReference Include="..\PointNet.Services.Mapping\PointNet.Services.Mapping.csproj" />
   </ItemGroup>
 

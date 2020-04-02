@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,7 @@
     using PointNet.Data.Repositories;
     using PointNet.Data.Seeding;
     using PointNet.Services.Data;
+    using PointNet.Services.Data.Catalog;
     using PointNet.Services.Mapping;
     using PointNet.Services.Messaging;
     using PointNet.Web.ViewModels;
@@ -46,7 +48,10 @@
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(configure =>
+            {
+                configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
             services.AddRazorPages();
 
             services.AddSingleton(this.configuration);
@@ -59,6 +64,8 @@
             // Application services
             services.AddTransient<IEmailSender>(x => new SendGridEmailSender("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"));
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IProductsService, ProductsService>();
+            services.AddTransient<ICategoriesService, CategoriesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
