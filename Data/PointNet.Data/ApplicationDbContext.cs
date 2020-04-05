@@ -31,6 +31,12 @@
 
         public DbSet<Comment> Comments { get; set; }
 
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<Address> Addresses { get; set; }
+
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
