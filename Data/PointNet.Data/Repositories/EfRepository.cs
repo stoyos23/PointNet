@@ -26,6 +26,8 @@
 
         public virtual Task AddAsync(TEntity entity) => this.DbSet.AddAsync(entity).AsTask();
 
+        public virtual TEntity FindById(int id) => this.DbSet.Find(id);
+
         public virtual void Update(TEntity entity)
         {
             var entry = this.Context.Entry(entity);

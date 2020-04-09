@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace PointNet.Data.Migrations
+﻿namespace PointNet.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class ShoppingCartModels : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -45,7 +46,7 @@ namespace PointNet.Data.Migrations
                     Country = table.Column<string>(nullable: true),
                     City = table.Column<string>(nullable: true),
                     Street = table.Column<string>(nullable: true),
-                    HouseNumber = table.Column<string>(nullable: true)
+                    HouseNumber = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -64,7 +65,7 @@ namespace PointNet.Data.Migrations
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     ProductId = table.Column<int>(nullable: true),
                     Amount = table.Column<int>(nullable: false),
-                    ShoppingCartId = table.Column<int>(nullable: false)
+                    ShoppingCartId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -89,7 +90,7 @@ namespace PointNet.Data.Migrations
                     UserId1 = table.Column<string>(nullable: true),
                     ShippingAddressId = table.Column<int>(nullable: true),
                     Price = table.Column<decimal>(nullable: false),
-                    IsShipped = table.Column<bool>(nullable: false)
+                    IsShipped = table.Column<bool>(nullable: false),
                 },
                 constraints: table =>
                 {

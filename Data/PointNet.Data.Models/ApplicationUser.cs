@@ -16,6 +16,8 @@ namespace PointNet.Data.Models
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.Comments = new HashSet<Comment>();
+            this.Orders = new HashSet<Order>();
+            this.ShoppingCart = new ShoppingCart();
         }
 
         // Audit info
@@ -35,5 +37,11 @@ namespace PointNet.Data.Models
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public virtual ICollection<Order> Orders { get; set; }
+
+        public virtual ShoppingCart ShoppingCart { get; set; }
+
+        public int ShoppingCartId { get; set; }
     }
 }

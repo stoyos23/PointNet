@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PointNet.Data;
 
 namespace PointNet.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200407110617_AddUserOrders")]
+    partial class AddUserOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -368,9 +370,6 @@ namespace PointNet.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ShoppingCartId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -389,8 +388,6 @@ namespace PointNet.Data.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("ShoppingCartId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -464,32 +461,6 @@ namespace PointNet.Data.Migrations
                     b.ToTable("Settings");
                 });
 
-            modelBuilder.Entity("PointNet.Data.Models.ShoppingCart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("ShoppingCarts");
-                });
-
             modelBuilder.Entity("PointNet.Data.Models.ShoppingCartItem", b =>
                 {
                     b.Property<int>("Id")
@@ -523,8 +494,6 @@ namespace PointNet.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ShoppingCartId");
 
                     b.ToTable("ShoppingCartItems");
                 });
@@ -602,13 +571,6 @@ namespace PointNet.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PointNet.Data.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("PointNet.Data.Models.ShoppingCart", "ShoppingCart")
-                        .WithMany()
-                        .HasForeignKey("ShoppingCartId");
-                });
-
             modelBuilder.Entity("PointNet.Data.Models.Order", b =>
                 {
                     b.HasOne("PointNet.Data.Models.Address", "ShippingAddress")
@@ -625,12 +587,6 @@ namespace PointNet.Data.Migrations
                     b.HasOne("PointNet.Data.Common.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
-
-                    b.HasOne("PointNet.Data.Models.ShoppingCart", null)
-                        .WithMany("ShoppingCartItems")
-                        .HasForeignKey("ShoppingCartId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

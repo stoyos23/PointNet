@@ -1,0 +1,26 @@
+﻿
+@using PointNet.Web.ViewModels.Catalog
+@model ProductViewModel
+@{
+    ViewData["Title"] = "ProductDetails";
+}
+
+@{ if (Model != null)
+    {
+        <li>
+            @Model.Title
+        </li>
+        <li>
+            @Model.Price
+        </li>
+        <li>
+            @Model.Description
+        </li>
+        <div class="img-rounded" alt="Cinque Terre">
+            <li>
+                <img class="img-fluid" src="@Model.ImageUrl" alt="Sample Photo" />
+            </li>
+        </div>
+    }
+}
+

@@ -9,6 +9,8 @@
     {
         IQueryable<TEntity> All();
 
+        TEntity FindById(int id);
+
         IQueryable<TEntity> AllAsNoTracking();
 
         Task AddAsync(TEntity entity);

@@ -12,5 +12,7 @@
         IEnumerable<T> GetProductsInSpecificCategory<T>(int? id);
 
         public void AddNewProduct<T>(ProductViewModel viewModel);
+
+        public ProductViewModel GetProductDetails(int id);
     }
 }

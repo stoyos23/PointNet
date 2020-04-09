@@ -66,10 +66,9 @@
 
         public async Task<IActionResult> AddNewRole()
         {
-            
             await this.roleManager.CreateAsync(new ApplicationRole
             {
-                Name = "Manager"
+                Name = "Manager",
             });
             var user = await this.userManager.GetUserAsync(this.User);
             await this.userManager.AddToRoleAsync(user, "Manager");

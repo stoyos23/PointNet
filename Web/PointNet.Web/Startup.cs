@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Caching.SqlServer;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -19,6 +20,7 @@
     using PointNet.Data.Seeding;
     using PointNet.Services.Data;
     using PointNet.Services.Data.Catalog;
+    using PointNet.Services.Data.ShoppingCart;
     using PointNet.Services.Mapping;
     using PointNet.Services.Messaging;
     using PointNet.Web.ViewModels;
@@ -48,6 +50,14 @@
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
+            services.AddDistributedSqlServerCache(options =>
+            {
+                options.ConnectionString = this.configuration.GetConnectionString("DefaultConnection");
+                options.SchemaName = "dbo";
+                options.TableName = "CacheRecords";
+            });
+            services.AddSession();
+
             services.AddControllersWithViews(configure =>
             {
                 configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
@@ -66,6 +76,7 @@
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
+            services.AddTransient<IShoppingCartService, ShoppingCartService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -96,6 +107,8 @@
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            app.UseSession();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

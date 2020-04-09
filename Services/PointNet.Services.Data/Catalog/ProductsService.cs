@@ -58,5 +58,20 @@
 
             return products.To<T>().ToList();
         }
+
+        public ProductViewModel GetProductDetails(int id)
+        {
+            var product = this.productsRepository.FindById(id);
+            var model = new ProductViewModel
+            {
+                Title = product.Title,
+                Price = product.Price,
+                Description = product.Description,
+                ImageUrl = product.ImageUrl,
+                CategoryId = product.CategoryId,
+            };
+            
+            return model;
+        }
     }
 }
