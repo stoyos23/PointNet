@@ -2,9 +2,12 @@
 {
     using System.Collections.Generic;
 
-    public class CategoriesViewModel
+    using PointNet.Data.Common.Models;
+    using PointNet.Services.Mapping;
+
+    public class CategoriesViewModel : IMapFrom<Category>
     {
-        public int CategoryId { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
 

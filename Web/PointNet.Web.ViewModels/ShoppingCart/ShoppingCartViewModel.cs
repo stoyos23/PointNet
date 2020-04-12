@@ -9,5 +9,7 @@
     public class ShoppingCartViewModel
     {
         public List<ShoppingCartItem> ShoppingCartItems { get; set; }
+
+        public decimal TotalPrice { get; set; }
     }
 }

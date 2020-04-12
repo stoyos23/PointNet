@@ -1,39 +1,16 @@
-﻿namespace PointNet.Data.Migrations
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+namespace PointNet.Data.Migrations
 {
-    using System;
-
-    using Microsoft.EntityFrameworkCore.Migrations;
-
-    public partial class ShoppingCartModels : Migration
+    public partial class TestMigrationRes : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Title",
-                table: "Products",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Description",
-                table: "Products",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
             migrationBuilder.AddColumn<int>(
-                name: "Quantity",
-                table: "Products",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "Categories",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                name: "ShoppingCartId",
+                table: "AspNetUsers",
+                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "Addresses",
@@ -46,7 +23,7 @@
                     Country = table.Column<string>(nullable: true),
                     City = table.Column<string>(nullable: true),
                     Street = table.Column<string>(nullable: true),
-                    HouseNumber = table.Column<string>(nullable: true),
+                    HouseNumber = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -54,7 +31,7 @@
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShoppingCartItems",
+                name: "ShoppingCarts",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -63,19 +40,11 @@
                     ModifiedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
-                    ProductId = table.Column<int>(nullable: true),
-                    Amount = table.Column<int>(nullable: false),
-                    ShoppingCartId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShoppingCartItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ShoppingCartItems_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_ShoppingCarts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -90,7 +59,7 @@
                     UserId1 = table.Column<string>(nullable: true),
                     ShippingAddressId = table.Column<int>(nullable: true),
                     Price = table.Column<decimal>(nullable: false),
-                    IsShipped = table.Column<bool>(nullable: false),
+                    IsShipped = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -108,6 +77,43 @@
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "ShoppingCartItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    ProductId = table.Column<int>(nullable: false),
+                    Amount = table.Column<int>(nullable: false),
+                    ShoppingCartId = table.Column<string>(nullable: true),
+                    ShoppingCartId1 = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingCartItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCartItems_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCartItems_ShoppingCarts_ShoppingCartId1",
+                        column: x => x.ShoppingCartId1,
+                        principalTable: "ShoppingCarts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_ShoppingCartId",
+                table: "AspNetUsers",
+                column: "ShoppingCartId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_ShippingAddressId",
@@ -128,10 +134,32 @@
                 name: "IX_ShoppingCartItems_ProductId",
                 table: "ShoppingCartItems",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCartItems_ShoppingCartId1",
+                table: "ShoppingCartItems",
+                column: "ShoppingCartId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCarts_IsDeleted",
+                table: "ShoppingCarts",
+                column: "IsDeleted");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_ShoppingCarts_ShoppingCartId",
+                table: "AspNetUsers",
+                column: "ShoppingCartId",
+                principalTable: "ShoppingCarts",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_AspNetUsers_ShoppingCarts_ShoppingCartId",
+                table: "AspNetUsers");
+
             migrationBuilder.DropTable(
                 name: "Orders");
 
@@ -141,33 +169,16 @@
             migrationBuilder.DropTable(
                 name: "Addresses");
 
+            migrationBuilder.DropTable(
+                name: "ShoppingCarts");
+
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUsers_ShoppingCartId",
+                table: "AspNetUsers");
+
             migrationBuilder.DropColumn(
-                name: "Quantity",
-                table: "Products");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Title",
-                table: "Products",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Description",
-                table: "Products",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "Categories",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldNullable: true);
+                name: "ShoppingCartId",
+                table: "AspNetUsers");
         }
     }
 }

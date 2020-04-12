@@ -12,7 +12,7 @@
         <div class="list-group" id="list-tab" role="tablist">
             @foreach (var category in Model.Categories)
             {
-                <a class="list-group-item list-group-item-action " data-animation="" asp-controller="Catalog" asp-action="ListProductsInCategory" asp-route-id="@category.CategoryId">
+                <a class="list-group-item list-group-item-action " data-animation="" asp-controller="Catalog" asp-action="ListProductsInCategory" asp-route-id="@category.Id">
                     @category.Name
                 </a>
             }

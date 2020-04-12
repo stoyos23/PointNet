@@ -3,20 +3,27 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
-
+    using System.Threading.Tasks;
     using PointNet.Data.Common.Models;
+    using PointNet.Data.Common.Repositories;
     using PointNet.Data.Models;
 
     public interface IShoppingCartService
     {
-        public void AddToCart(int productId, ApplicationUser user);
+        public List<ShoppingCartItem> GetCart(string userId);
 
-        public List<ShoppingCartItem> GetCart(ApplicationUser user);
+        public void AddToCart(int productId, string userId);
 
-        public decimal GetShoppingCartTotal();
+        //public static ShoppingCart GetCart(IServiceProvider service);
 
-        public int RemoveItemFromCart(Product product);
+        //public List<ShoppingCartItem> GetShoppingCartItems();
 
-        public void ClearCart();
+        //public void AddToCart(Product product, int amount);
+
+        //public decimal GetShoppingCartTotal();
+
+        //public int RemoveItemFromCart(Product product);
+
+        //public void ClearCart();
     }
 }

@@ -5,10 +5,13 @@
     using System.Linq;
     using System.Security.Claims;
     using System.Text;
-
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Caching.Distributed;
     using Microsoft.Extensions.DependencyInjection;
+    using Newtonsoft.Json;
     using PointNet.Data.Common.Models;
     using PointNet.Data.Common.Repositories;
     using PointNet.Data.Models;
@@ -16,73 +19,87 @@
     public class ShoppingCartService : IShoppingCartService
     {
         private readonly IDeletableEntityRepository<ShoppingCartItem> shoppingCartItemRepository;
-        private readonly IServiceProvider services;
         private readonly IRepository<Product> productRepository;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IDeletableEntityRepository<ShoppingCart> shoppingCartRepository;
+        private readonly IDistributedCache distributedCache;
+        private readonly ShoppingCart shoppingCart;
 
         public ShoppingCartService(
-            IServiceProvider services,
             IDeletableEntityRepository<ShoppingCartItem> shoppingCartItemRepository,
             IRepository<Product> productRepository,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IHttpContextAccessor httpContextAccessor,
+            IDeletableEntityRepository<ShoppingCart> shoppingCartRepository,
+            IDistributedCache distributedCache
+            )
         {
             this.shoppingCartItemRepository = shoppingCartItemRepository;
-            this.services = services;
             this.productRepository = productRepository;
             this.userManager = userManager;
+            this.httpContextAccessor = httpContextAccessor;
+            this.shoppingCartRepository = shoppingCartRepository;
+            this.distributedCache = distributedCache;
         }
 
-        public void AddToCart(int productId, ApplicationUser user)
+        public List<ShoppingCartItem> GetCart(string userId)
         {
+            var productRevert = this.distributedCache.GetString(userId);
+            var deserialize = JsonConvert.DeserializeObject<List<ShoppingCartItem>>(productRevert);
+
+            return deserialize;
+        }
+
+        public void AddToCart(int productId, string userId)
+        {
+            List<ShoppingCartItem> deserializedCartItems;
+
             var productToAdd = this.productRepository.FindById(productId);
 
-            bool productExistsInCart = false;
+            var productsInUserCart = this.distributedCache.GetString(userId);
 
-            if (user.ShoppingCart.ShoppingCartItems.Count > 0)
+            var cartItem = new ShoppingCartItem
             {
-                productExistsInCart = user.ShoppingCart.ShoppingCartItems.Exists(x => x.Id == productId);
-            }
+                Id = productToAdd.Id,
+                Title = productToAdd.Title,
+                ImageUrl = productToAdd.ImageUrl,
+                Price = productToAdd.Price,
+                Amount = 1,
+            };
 
-            if (!productExistsInCart)
+            if (productsInUserCart != null)
             {
-                var cartItem = new ShoppingCartItem
+                deserializedCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItem>>(productsInUserCart);
+
+                var findProductExist = deserializedCartItems.Find(x => x.Id == productToAdd.Id);
+
+                if (findProductExist != null)
                 {
-                    Product = productToAdd,
-                    Amount = 1,
-                    ShoppingCartId = user.ShoppingCartId,
-                };
-                user.ShoppingCart.ShoppingCartItems.Add(cartItem);
-                this.shoppingCartItemRepository.AddAsync(cartItem);
-                this.shoppingCartItemRepository.SaveChangesAsync();
-                return;
+                    findProductExist.Amount++;
+                }
+                else
+                {
+                    deserializedCartItems.Add(cartItem);
+                }
             }
             else
             {
-                var productInCart = user.ShoppingCart.ShoppingCartItems.Find(x => x.Id == productId);
-                productInCart.Amount++;
+                var productsList = new List<ShoppingCartItem> { cartItem };
+                var serializedProductList = JsonConvert.SerializeObject(productsList);
+
+                this.distributedCache.SetString(userId, serializedProductList, new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1),
+                });
+                return;
             }
-        }
 
-        public void ClearCart()
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<ShoppingCartItem> GetCart(ApplicationUser user)
-        {
-            var cartProducts = user.ShoppingCart.ShoppingCartItems;
-
-            return cartProducts;
-        }
-
-        public decimal GetShoppingCartTotal()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int RemoveItemFromCart(Product product)
-        {
-            throw new NotImplementedException();
+            var serializedCartItems = JsonConvert.SerializeObject(deserializedCartItems);
+            this.distributedCache.SetString(userId, serializedCartItems, new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1),
+            });
         }
     }
 }

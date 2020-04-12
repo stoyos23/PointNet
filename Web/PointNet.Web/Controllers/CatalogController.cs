@@ -13,6 +13,7 @@
     using PointNet.Services.Data;
     using PointNet.Services.Data.Catalog;
     using PointNet.Web.ViewModels.Catalog;
+    using PointNet.Services.Mapping;
 
     // TODO: Remove Db Context and replace with respositories
     public class CatalogController : Controller
@@ -21,25 +22,37 @@
         private readonly ApplicationDbContext dbContext;
         private readonly ICategoriesService categoriesService;
         private readonly IDeletableEntityRepository<Product> productRepository;
+        private readonly IDeletableEntityRepository<Category> categoryRepository;
 
-        public CatalogController(IProductsService productsService, ICategoriesService categoriesService, ApplicationDbContext dbContext, IDeletableEntityRepository<Product> productRepository)
+        public CatalogController(
+            IProductsService productsService,
+            ICategoriesService categoriesService,
+            ApplicationDbContext dbContext,
+            IDeletableEntityRepository<Product> productRepository,
+            IDeletableEntityRepository<Category> categoryRepository)
         {
             this.productService = productsService;
             this.dbContext = dbContext;
             this.categoriesService = categoriesService;
             this.productRepository = productRepository;
+            this.categoryRepository = categoryRepository;
         }
 
         public IActionResult Index()
         {
             var viewModel = new CatalogViewModel();
-            var categories = this.dbContext.Categories.Select(x => new CategoriesViewModel
-            {
-                Name = x.Name,
-                ImageuUrl = x.ImageuUrl,
-                CategoryId = x.Id,
-            }).ToList();
-            viewModel.Categories = categories;
+
+
+            //var categories = this.dbContext.Categories.Select(x => new CategoriesViewModel
+            //{
+            //    Name = x.Name,
+            //    ImageuUrl = x.ImageuUrl,
+            //    CategoryId = x.Id,
+            //}).ToList();
+            //viewModel.Categories = categories;
+
+            var categories = this.categoryRepository.All().To<CategoriesViewModel>();
+            viewModel.Categories = categories.ToList();
 
             return this.View(viewModel);
         }
@@ -56,7 +69,7 @@
 
         public IActionResult ProductDetails(int id)
         {
-            var productDetails = productService.GetProductDetails(id);
+            var productDetails = this.productService.GetProductDetails(id);
             return this.View(productDetails);
         }
     }

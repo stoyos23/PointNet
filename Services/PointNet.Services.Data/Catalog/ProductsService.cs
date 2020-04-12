@@ -70,7 +70,7 @@
                 ImageUrl = product.ImageUrl,
                 CategoryId = product.CategoryId,
             };
-            
+
             return model;
         }
     }

@@ -14,45 +14,60 @@
     using PointNet.Data.Common.Models;
     using PointNet.Data.Common.Repositories;
     using PointNet.Data.Models;
+    using PointNet.Services.Data.SessionHelper;
     using PointNet.Services.Data.ShoppingCart;
+    using PointNet.Web.ViewModels.ShoppingCart;
+    using Microsoft.EntityFrameworkCore;
+    using System.Security.Claims;
+    using Microsoft.Extensions.Caching.Distributed;
+    using Newtonsoft.Json;
 
     public class ShoppingCartController : Controller
     {
         private readonly IDeletableEntityRepository<Product> productRepository;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IShoppingCartService shoppingCartService;
+        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IDistributedCache distributedCache;
 
-        public ShoppingCartController(IDeletableEntityRepository<Product> productRepository, UserManager<ApplicationUser> userManager, IShoppingCartService shoppingCartService)
+        public ShoppingCartController(
+            IDeletableEntityRepository<Product> productRepository,
+            UserManager<ApplicationUser> userManager,
+            IShoppingCartService shoppingCartService,
+            IHttpContextAccessor httpContextAccessor,
+            IDistributedCache distributedCache)
         {
             this.productRepository = productRepository;
             this.userManager = userManager;
             this.shoppingCartService = shoppingCartService;
+            this.httpContextAccessor = httpContextAccessor;
+            this.distributedCache = distributedCache;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return this.View();
+            var user = await userManager.GetUserAsync(this.HttpContext.User);
+            var shoppingCartItems = this.shoppingCartService.GetCart(user.Id);
+            var shoppingCartViewModel = new ShoppingCartViewModel();
+
+            if (shoppingCartItems.Count != 0)
+            {
+                shoppingCartViewModel.ShoppingCartItems = shoppingCartItems;
+
+                return this.View(shoppingCartViewModel);
+            }
+            else
+            {
+                return this.Content("Your Shopping Cart is Empty");
+            }
         }
 
         public async Task<IActionResult> AddToCart(int id)
         {
-            var user = await this.userManager.GetUserAsync(this.User);
+            var user = await userManager.GetUserAsync(this.HttpContext.User);
+            this.shoppingCartService.AddToCart(id, user.Id);
 
-            var test = user.ShoppingCart.ShoppingCartItems.Count();
-            var testId = user.ShoppingCartId;
-
-            this.shoppingCartService.AddToCart(id, user);
-
-            return this.Redirect("/");
-        }
-
-        public async Task<IActionResult> GetCart()
-        {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            var cartProducts = this.shoppingCartService.GetCart(user);
-
-            return this.View(cartProducts);
+            return this.RedirectToAction("Index");
         }
     }
 }
