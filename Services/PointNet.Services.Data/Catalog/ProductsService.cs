@@ -19,7 +19,7 @@
 
         public void AddNewProduct<T>(ProductViewModel viewModel)
         {
-            Product product = new Product
+            Product product = new Product()
             {
                 Title = viewModel.Title,
                 Description = viewModel.Description,
@@ -38,7 +38,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        public IEnumerable<T> GetProductsInSpecificCategory<T>(int? id = null)
+        public IQueryable<T> GetProductsInSpecificCategory<T>(int? id = null)
         {
             // this.productsRepository.All().Where(x => x.CategoryId == id);
 
@@ -49,6 +49,8 @@
             //    ImageUrl = x.ImageUrl,
             //    Price = x.Price,
             // }).ToList();
+
+
             var products = this.productsRepository.All();
 
             if (id.HasValue)
@@ -56,7 +58,7 @@
                 products = this.productsRepository.All().Where(x => x.CategoryId == id);
             }
 
-            return products.To<T>().ToList();
+            return products.To<T>();
         }
 
         public ProductViewModel GetProductDetails(int id)

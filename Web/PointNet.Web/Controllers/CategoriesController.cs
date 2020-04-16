@@ -12,11 +12,11 @@
     using PointNet.Data.Common.Repositories;
     using PointNet.Services.Data;
     using PointNet.Services.Data.Catalog;
-    using PointNet.Web.ViewModels.Catalog;
     using PointNet.Services.Mapping;
+    using PointNet.Web.ViewModels.Catalog;
 
     // TODO: Remove Db Context and replace with respositories
-    public class CatalogController : Controller
+    public class CategoriesController : Controller
     {
         private readonly IProductsService productService;
         private readonly ApplicationDbContext dbContext;
@@ -24,7 +24,7 @@
         private readonly IDeletableEntityRepository<Product> productRepository;
         private readonly IDeletableEntityRepository<Category> categoryRepository;
 
-        public CatalogController(
+        public CategoriesController(
             IProductsService productsService,
             ICategoriesService categoriesService,
             ApplicationDbContext dbContext,
@@ -55,22 +55,6 @@
             viewModel.Categories = categories.ToList();
 
             return this.View(viewModel);
-        }
-
-        public IActionResult ListProductsInCategory(int id)
-         {
-            // var products = new CategoriesViewModel
-            // {
-            //    Products = this.productService.GetProductsInSpecificCategory<ProductViewModel>(id).ToList(),
-            // };
-            var products = this.productService.GetProductsInSpecificCategory<ProductViewModel>(id);
-            return this.View("ListProductsInCategory", products);
-        }
-
-        public IActionResult ProductDetails(int id)
-        {
-            var productDetails = this.productService.GetProductDetails(id);
-            return this.View(productDetails);
         }
     }
 }

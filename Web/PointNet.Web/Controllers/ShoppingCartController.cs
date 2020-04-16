@@ -50,7 +50,7 @@
             var shoppingCartItems = this.shoppingCartService.GetCart(user.Id);
             var shoppingCartViewModel = new ShoppingCartViewModel();
 
-            if (shoppingCartItems.Count != 0)
+            if (shoppingCartItems != null)
             {
                 shoppingCartViewModel.ShoppingCartItems = shoppingCartItems;
 
@@ -58,7 +58,7 @@
             }
             else
             {
-                return this.Content("Your Shopping Cart is Empty");
+                return this.View();
             }
         }
 
@@ -66,6 +66,14 @@
         {
             var user = await userManager.GetUserAsync(this.HttpContext.User);
             this.shoppingCartService.AddToCart(id, user.Id);
+
+            return this.RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> RemoveFromCart(int id)
+        {
+            var user = await userManager.GetUserAsync(this.HttpContext.User);
+            this.shoppingCartService.RemoveFromCart(id, user.Id);
 
             return this.RedirectToAction("Index");
         }

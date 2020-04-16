@@ -14,6 +14,8 @@
 
         public void AddToCart(int productId, string userId);
 
+        public void RemoveFromCart(int productId, string userId);
+
         //public static ShoppingCart GetCart(IServiceProvider service);
 
         //public List<ShoppingCartItem> GetShoppingCartItems();

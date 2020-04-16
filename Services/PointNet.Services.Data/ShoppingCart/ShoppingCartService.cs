@@ -45,10 +45,19 @@
 
         public List<ShoppingCartItem> GetCart(string userId)
         {
-            var productRevert = this.distributedCache.GetString(userId);
-            var deserialize = JsonConvert.DeserializeObject<List<ShoppingCartItem>>(productRevert);
+            List<ShoppingCartItem> deserializedProductList;
+            var cachedShoppingCartItems = this.distributedCache.GetString(userId);
 
-            return deserialize;
+            if (cachedShoppingCartItems != null)
+            {
+                deserializedProductList = JsonConvert.DeserializeObject<List<ShoppingCartItem>>(cachedShoppingCartItems);
+
+                return deserializedProductList;
+            }
+            else
+            {
+                return null;
+            }         
         }
 
         public void AddToCart(int productId, string userId)
@@ -57,49 +66,67 @@
 
             var productToAdd = this.productRepository.FindById(productId);
 
-            var productsInUserCart = this.distributedCache.GetString(userId);
-
-            var cartItem = new ShoppingCartItem
+            if (productToAdd != null)
             {
-                Id = productToAdd.Id,
-                Title = productToAdd.Title,
-                ImageUrl = productToAdd.ImageUrl,
-                Price = productToAdd.Price,
-                Amount = 1,
-            };
+                var productsInUserCart = this.distributedCache.GetString(userId);
 
-            if (productsInUserCart != null)
-            {
-                deserializedCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItem>>(productsInUserCart);
-
-                var findProductExist = deserializedCartItems.Find(x => x.Id == productToAdd.Id);
-
-                if (findProductExist != null)
+                var cartItem = new ShoppingCartItem
                 {
-                    findProductExist.Amount++;
+                    Id = productToAdd.Id,
+                    Title = productToAdd.Title,
+                    ImageUrl = productToAdd.ImageUrl,
+                    Price = productToAdd.Price,
+                    Amount = 1,
+                };
+
+                if (productsInUserCart != null)
+                {
+                    deserializedCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItem>>(productsInUserCart);
+
+                    var findProductExist = deserializedCartItems.Find(x => x.Id == productToAdd.Id);
+
+                    if (findProductExist != null)
+                    {
+                        findProductExist.Amount++;
+                    }
+                    else
+                    {
+                        deserializedCartItems.Add(cartItem);
+                    }
                 }
                 else
                 {
-                    deserializedCartItems.Add(cartItem);
-                }
-            }
-            else
-            {
-                var productsList = new List<ShoppingCartItem> { cartItem };
-                var serializedProductList = JsonConvert.SerializeObject(productsList);
+                    var productsList = new List<ShoppingCartItem> { cartItem };
+                    var serializedProductList = JsonConvert.SerializeObject(productsList);
 
-                this.distributedCache.SetString(userId, serializedProductList, new DistributedCacheEntryOptions
+                    this.distributedCache.SetString(userId, serializedProductList, new DistributedCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1),
+                    });
+                    return;
+                }
+
+                var serializedCartItems = JsonConvert.SerializeObject(deserializedCartItems);
+                this.distributedCache.SetString(userId, serializedCartItems, new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1),
                 });
-                return;
             }
+        }
 
-            var serializedCartItems = JsonConvert.SerializeObject(deserializedCartItems);
-            this.distributedCache.SetString(userId, serializedCartItems, new DistributedCacheEntryOptions
+        public void RemoveFromCart(int productId, string userId)
+        {
+            var productsInUserCart = this.distributedCache.GetString(userId);
+            var deserializedCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItem>>(productsInUserCart);
+            var itemToRemove = deserializedCartItems.FirstOrDefault(x => x.Id == productId);
+            deserializedCartItems.Remove(itemToRemove);
+            var serializeCartItems = JsonConvert.SerializeObject(deserializedCartItems);
+
+            this.distributedCache.SetString(userId, serializeCartItems, new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1),
             });
+            return;
         }
     }
 }

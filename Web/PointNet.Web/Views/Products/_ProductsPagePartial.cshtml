@@ -1,0 +1,57 @@
+﻿
+@using PointNet.Web.ViewModels.Catalog
+@using ReflectionIT.Mvc.Paging
+@using PointNet.Data.Models
+@model PaginatedList<ProductViewModel>
+@{
+    ViewData["Title"] = "ProductsPagePartial";
+}
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="~/js/site.js"></script>
+@*<script type="text/javascript" src="~/js/Pagination.js"></script>*@
+<pager class="pager" list="@Model" asp-action="Index" asp-controller="Products" asp-route-model="2" param-page-number="page" />
+
+@{ 
+    int currectCategoryId = Model[0].CategoryId;
+}
+
+<div class="container">
+    <div class="row">
+        @{
+            foreach (var product in Model)
+            {
+                <div class="col-sm-6 col-md-6 col-lg-4">
+                    <a class="thumbnail" asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">
+                        <img src="@product.ImageUrl" alt="@product.Title" class="img-fluid" />
+                    </a>
+                    <div class="text-center">
+                        <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@product.Id"><button type="button" class="btn btn-primary btn-lg" title="View More">View More</button></a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<dic
+<a asp-action="Index"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-categoryId="@currectCategoryId"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+
+<a asp-controller="Products" asp-action="Index"
+   asp-route-page="@(Model.PageIndex + 1)"
+   asp-route-categoryId="@currectCategoryId"
+   class="btn btn-default enabled @nextDisabled">
+    Next
+</a>
+

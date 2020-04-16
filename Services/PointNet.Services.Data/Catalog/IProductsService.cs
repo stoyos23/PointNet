@@ -9,7 +9,7 @@
     public interface IProductsService
     {
         // public AddNewProduct(string title, string description, string imageUrl, decimal price, int categoryId);
-        IEnumerable<T> GetProductsInSpecificCategory<T>(int? id);
+        IQueryable<T> GetProductsInSpecificCategory<T>(int? id);
 
         public void AddNewProduct<T>(ProductViewModel viewModel);
 

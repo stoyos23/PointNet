@@ -24,6 +24,7 @@
     using PointNet.Services.Mapping;
     using PointNet.Services.Messaging;
     using PointNet.Web.ViewModels;
+    using ReflectionIT.Mvc.Paging;
 
     public class Startup
     {
@@ -63,6 +64,8 @@
                 configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
             services.AddRazorPages();
+
+            services.AddPaging();
 
             services.AddSingleton(this.configuration);
 
