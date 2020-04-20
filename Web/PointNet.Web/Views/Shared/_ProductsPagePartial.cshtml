@@ -45,7 +45,7 @@
                             </div>
                             <h5 class="text-center">@product.Title</h5>
                             <h5 class="text-center">Price: $@product.Price</h5>
-                            <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@product.Id" class="btn buy">Add To Cart</a>
+                            <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@product.Id" asp-route-quantity="1" class="btn buy">Add To Cart</a>
                         </div>
 
                 @*<div class="col-sm-4">
