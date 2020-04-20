@@ -12,7 +12,7 @@
     {
         public List<ShoppingCartItem> GetCart(string userId);
 
-        public void AddToCart(int productId, string userId);
+        public void AddToCart(int productId, string userId, int quantity);
 
         public void RemoveFromCart(int productId, string userId);
 

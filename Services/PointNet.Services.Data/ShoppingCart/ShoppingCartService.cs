@@ -60,7 +60,7 @@
             }         
         }
 
-        public void AddToCart(int productId, string userId)
+        public void AddToCart(int productId, string userId, int quantity)
         {
             List<ShoppingCartItem> deserializedCartItems;
 
@@ -70,13 +70,25 @@
             {
                 var productsInUserCart = this.distributedCache.GetString(userId);
 
+                
+
+                if ((productToAdd.Quantity - quantity) < 0 )
+                {
+                    return;
+                }
+                else
+                {
+                    productToAdd.Quantity = productToAdd.Quantity - quantity;
+                    productRepository.SaveChangesAsync();
+                }
+
                 var cartItem = new ShoppingCartItem
                 {
                     Id = productToAdd.Id,
                     Title = productToAdd.Title,
                     ImageUrl = productToAdd.ImageUrl,
                     Price = productToAdd.Price,
-                    Amount = 1,
+                    Amount = quantity,
                 };
 
                 if (productsInUserCart != null)
@@ -119,7 +131,20 @@
             var productsInUserCart = this.distributedCache.GetString(userId);
             var deserializedCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItem>>(productsInUserCart);
             var itemToRemove = deserializedCartItems.FirstOrDefault(x => x.Id == productId);
-            deserializedCartItems.Remove(itemToRemove);
+
+            if (itemToRemove.Amount > 1)
+            {
+                itemToRemove.Amount--;
+                productRepository.FindById(productId).Quantity++;
+            }
+            else
+            {
+                deserializedCartItems.Remove(itemToRemove);
+                productRepository.FindById(productId).Quantity++;
+            }
+
+            productRepository.SaveChangesAsync();
+
             var serializeCartItems = JsonConvert.SerializeObject(deserializedCartItems);
 
             this.distributedCache.SetString(userId, serializeCartItems, new DistributedCacheEntryOptions

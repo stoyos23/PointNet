@@ -24,6 +24,7 @@
                 Title = viewModel.Title,
                 Description = viewModel.Description,
                 Price = viewModel.Price,
+                Quantity = viewModel.Quantity,
                 ImageUrl = viewModel.ImageUrl,
                 CategoryId = viewModel.CategoryId,
             };
@@ -70,6 +71,7 @@
                 Title = product.Title,
                 Price = product.Price,
                 Description = product.Description,
+                Quantity = product.Quantity,
                 ImageUrl = product.ImageUrl,
                 CategoryId = product.CategoryId,
             };

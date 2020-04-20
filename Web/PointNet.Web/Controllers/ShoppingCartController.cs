@@ -62,10 +62,10 @@
             }
         }
 
-        public async Task<IActionResult> AddToCart(int id)
+        public async Task<IActionResult> AddToCart(int id, int quantity)
         {
             var user = await userManager.GetUserAsync(this.HttpContext.User);
-            this.shoppingCartService.AddToCart(id, user.Id);
+            this.shoppingCartService.AddToCart(id, user.Id, quantity);
 
             return this.RedirectToAction("Index");
         }

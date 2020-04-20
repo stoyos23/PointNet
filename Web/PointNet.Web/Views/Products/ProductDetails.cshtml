@@ -31,10 +31,7 @@
                 </div>
 
                 <p class="lead">
-                    <span class="mr-1">
-                        <del>$200</del>
-                    </span>
-                    <span>$@Model.Price</span>
+                    <h4>$@Model.Price</h4>
                 </p>
 
                 <p class="lead font-weight-bold">Description</p>
@@ -43,15 +40,17 @@
                     @Model.Description
                 </p>
 
-                <form class="d-flex justify-content-left">
+                <form asp-controller="ShoppingCart" asp-action="AddNewProduct" class="d-flex justify-content-left">
                     <!-- Default input -->
-                    <input type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
+                    <input asp-for="Quantity" type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
 
                     <button asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@Model.Id" class="btn btn-primary btn-sm my-0 p" type="submit">
                         Add to cart
                     </button>
-
                 </form>
+                <div>
+                    <p>Available Quantity:@Model.Quantity</p>
+                </div>
 
             </div>
             <!--Content-->
