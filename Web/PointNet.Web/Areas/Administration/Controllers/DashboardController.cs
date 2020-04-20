@@ -49,7 +49,7 @@
 
         [HttpPost]
         public IActionResult AddNewProduct(ProductViewModel viewModel)
-        {
+          {
             if (this.ModelState.IsValid)
             {
                 this.productService.AddNewProduct<ProductViewModel>(viewModel);

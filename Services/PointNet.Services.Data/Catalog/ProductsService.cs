@@ -66,6 +66,7 @@
             var product = this.productsRepository.FindById(id);
             var model = new ProductViewModel
             {
+                Id = product.Id,
                 Title = product.Title,
                 Price = product.Price,
                 Description = product.Description,

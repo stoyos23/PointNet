@@ -1,0 +1,95 @@
+﻿
+@using PointNet.Web.ViewModels.Catalog
+@using ReflectionIT.Mvc.Paging
+@using PointNet.Data.Models
+@model PaginatedList<ProductViewModel>
+@{
+    ViewData["Title"] = "ProductsPagePartial";
+}
+    <head>
+        @*<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <script type="text/javascript" src="~/js/site.js"></script>
+        <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.css" />*@
+        <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+        <link rel="stylesheet" type="text/css" href="~/css/productsViewPage.css"/>
+        @*<link rel="stylesheet" type="text/css" href="~/css/test.css" />*@
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+    </head>
+
+@{
+    int currectCategoryId = Model[0].CategoryId;
+}
+
+
+
+
+<body>
+    <div class="container">
+            <h1 class="text-center">BOOTSTRAP PRODUCT GRID</h1>
+            <hr>
+
+            <div class="row">
+                @{
+                    foreach (var product in Model)
+                    {
+                        <div class="col-md-4 product-grid">
+                            <div class="image text-center">
+                                <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">
+                                    <img src="@product.ImageUrl" class="img-fluid">
+                                    <div class="overlay">
+                                        <div class="detail">View Details</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <h5 class="text-center">@product.Title</h5>
+                            <h5 class="text-center">Price: $@product.Price</h5>
+                            <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@product.Id" class="btn buy">Add To Cart</a>
+                        </div>
+
+                @*<div class="col-sm-4">
+                    <img src="@product.ImageUrl" class="img-fluid">
+                </div>*@
+                    }
+                }
+            </div>
+
+        </div>
+
+
+
+
+
+
+
+
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+
+    <div class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container">
+            <a asp-action="Index"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-categoryId="@currectCategoryId"
+               class="btn btn-default @prevDisabled">
+                Previous
+            </a>
+
+            <a asp-controller="Products" asp-action="Index"
+               asp-route-page="@(Model.PageIndex + 1)"
+               asp-route-categoryId="@currectCategoryId"
+               class="btn btn-default enabled @nextDisabled">
+                Next
+            </a>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
+    <script src="~/js/productsPage.js" asp-append-version="true"></script>
+</body>
