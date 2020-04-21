@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data\PointNet.Data\PointNet.Data.csproj" />
+    <ProjectReference Include="..\Services\PointNet.Services.Data\PointNet.Services.Data.csproj" />
+    <ProjectReference Include="..\Services\PointNet.Services\PointNet.Services.csproj" />
+    <ProjectReference Include="..\Tests\PointNet.Services.Data.Tests\PointNet.Services.Data.Tests.csproj" />
+    <ProjectReference Include="..\Web\PointNet.Web.Infrastructure\PointNet.Web.Infrastructure.csproj" />
+    <ProjectReference Include="..\Web\PointNet.Web.ViewModels\PointNet.Web.ViewModels.csproj" />
+    <ProjectReference Include="..\Web\PointNet.Web\PointNet.Web.csproj" />
+  </ItemGroup>
+
+</Project>

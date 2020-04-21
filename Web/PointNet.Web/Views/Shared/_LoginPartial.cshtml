@@ -8,7 +8,7 @@
         @if (this.SignInManager.IsSignedIn(this.User))
         {
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingCart" asp-action="Index">Cart</a>
+                <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingCart" asp-action="Index"><i class="fa" style="font-size:28px">&#xf07a;</i></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(this.User.Identity.Name)!</a>
