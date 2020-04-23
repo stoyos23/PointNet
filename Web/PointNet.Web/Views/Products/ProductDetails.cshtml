@@ -4,62 +4,100 @@
 @{
     ViewData["Title"] = "ProductDetails";
 }
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 mb-4">
+@{
+    <head>
 
-            <img src="@Model.ImageUrl" class="img-fluid" alt="">
+    </head>
 
-        </div>
-        <!--Grid column-->
-        <!--Grid column-->
-        <div class="col-md-6 mb-4">
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-4">
 
-            <!--Content-->
-            <div class="p-4">
+                    <img src="@Model.ImageUrl" class="img-fluid" alt="">
 
-                <div class="mb-3">
-                    <a href="">
-                        <span class="badge purple mr-1">Category 2</span>
-                    </a>
-                    <a href="">
-                        <span class="badge blue mr-1">New</span>
-                    </a>
-                    <a href="">
-                        <span class="badge red mr-1">Bestseller</span>
-                    </a>
                 </div>
+                <!--Grid column-->
+                <!--Grid column-->
+                <div class="col-md-6 mb-4">
 
-                <p class="lead">
-                    <h4>$@Model.Price</h4>
-                </p>
+                    <!--Content-->
+                    <div class="p-4">
 
-                <p class="lead font-weight-bold">Description</p>
+                        <div class="mb-3">
+                            <a href="">
+                                <span class="badge purple mr-1">Category 2</span>
+                            </a>
+                            <a href="">
+                                <span class="badge blue mr-1">New</span>
+                            </a>
+                            <a href="">
+                                <span class="badge red mr-1">Bestseller</span>
+                            </a>
+                        </div>
 
-                <p>
-                    @Model.Description
-                </p>
+                        <p class="lead">
+                            <h4>$@Model.Price</h4>
+                        </p>
 
-                <form asp-controller="ShoppingCart" asp-action="AddNewProduct" class="d-flex justify-content-left">
-                    <!-- Default input -->
-                    <input asp-for="Quantity" type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
+                        <p class="lead font-weight-bold">Description</p>
 
-                    <button asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@Model.Id" class="btn btn-primary btn-sm my-0 p" type="submit">
-                        Add to cart
-                    </button>
-                </form>
-                <div>
-                    <p>Available Quantity: @Model.Quantity</p>
+                        <p>
+                            @Model.Description
+                        </p>
+
+                        <form asp-controller="ShoppingCart" asp-action="AddNewProduct" class="d-flex justify-content-left">
+                            <!-- Default input -->
+                            <input asp-for="Quantity" type="number" value="1" onchange="isQuantityAvailable(@Model.Quantity);" id="inputQuantity" aria-label="Search" class="form-control" style="width: 100px">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+
+                                <button asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@Model.Id" class="btn btn-primary btn-sm my-0 p" type="submit">
+                                    Add to cart
+                                </button>
+                            }
+                            else
+                            {
+                                <button asp-area="Identity" asp-page="/Account/Login"  class="btn btn-primary btn-sm my-0 p" type="submit">
+                                    Add to cart
+                                </button>
+                            }
+                        </form>
+                        <div>
+                            <p>Available Quantity: @Model.Quantity</p>
+                        </div>
+
+                    </div>
+                    <!--Content-->
+
                 </div>
-
+                <!--Grid column-->
             </div>
-            <!--Content-->
-
         </div>
-        <!--Grid column-->
+    </body>
+    <!--Grid row-->
+}
+
+<div class="popup" id="popup" style="display:none;">
+    <div class="popup-inner">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Maximum Quantity Exceeded</h5>
+                    <button type="button" class="close" onclick="popupClose();" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Maximum Available Quantity is: @Model.Quantity
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="popupClose();" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<!--Grid row-->
 
 <hr>
 
@@ -67,22 +105,10 @@
 
 <partial name="_CommentsPartial" />
 <!--Grid row-->
-<div class="row d-flex justify-content-center wow fadeIn">
 
-    <!--Grid column-->
-    <div class="col-md-6 text-center">
 
-        <h4 class="my-4 h4">Additional information</h4>
 
-        <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta odit
-            voluptates,
-            quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum in laborum.
-        </p>
 
-    </div>
-    <!--Grid column-->
-
-</div>
-<!--Grid row-->
-
+<script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<link href="~/css/popup.css" type="text/css" rel="stylesheet" />
