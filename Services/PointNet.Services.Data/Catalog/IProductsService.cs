@@ -16,5 +16,7 @@
         public ProductViewModel GetProductDetails(int id);
 
         public IQueryable<T> GetProductsByName<T>(string productName);
+
+        public void RemoveProduct(int productId);
     }
 }

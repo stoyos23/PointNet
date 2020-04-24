@@ -89,14 +89,12 @@
 
         public IActionResult RemoveProduct(int productId)
         {
-            var model = new ProductViewModel();
-            model.AllCategories = this.categoriesService.AllCategories().Select(x => new SelectListItem()
+            if(productId != null)
             {
-                Value = x.Id.ToString(),
-                Text = x.Name,
-            }).ToList();
+                this.productService.RemoveProduct(productId);
+            }
 
-            return this.View("AddNewProduct", model);
+            return this.RedirectToAction("FindProducts");
         }
     }
 }

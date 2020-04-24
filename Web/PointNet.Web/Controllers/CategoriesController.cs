@@ -18,38 +18,17 @@
     // TODO: Remove Db Context and replace with respositories
     public class CategoriesController : Controller
     {
-        private readonly IProductsService productService;
-        private readonly ApplicationDbContext dbContext;
-        private readonly ICategoriesService categoriesService;
-        private readonly IDeletableEntityRepository<Product> productRepository;
         private readonly IDeletableEntityRepository<Category> categoryRepository;
 
         public CategoriesController(
-            IProductsService productsService,
-            ICategoriesService categoriesService,
-            ApplicationDbContext dbContext,
-            IDeletableEntityRepository<Product> productRepository,
             IDeletableEntityRepository<Category> categoryRepository)
         {
-            this.productService = productsService;
-            this.dbContext = dbContext;
-            this.categoriesService = categoriesService;
-            this.productRepository = productRepository;
             this.categoryRepository = categoryRepository;
         }
 
         public IActionResult Index()
         {
             var viewModel = new CatalogViewModel();
-
-
-            //var categories = this.dbContext.Categories.Select(x => new CategoriesViewModel
-            //{
-            //    Name = x.Name,
-            //    ImageuUrl = x.ImageuUrl,
-            //    CategoryId = x.Id,
-            //}).ToList();
-            //viewModel.Categories = categories;
 
             var categories = this.categoryRepository.All().To<CategoriesViewModel>();
             viewModel.Categories = categories.ToList();

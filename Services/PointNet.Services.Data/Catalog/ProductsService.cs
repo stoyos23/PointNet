@@ -33,25 +33,8 @@
             return;
         }
 
-        /// <summary>
-        /// Returns products from Specific category.(If CategoryId == null returns all products).
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public IQueryable<T> GetProductsInSpecificCategory<T>(int? id = null)
         {
-            // this.productsRepository.All().Where(x => x.CategoryId == id);
-
-            // var products = this.productsRepository.All().Where(x => x.CategoryId == id).Select(x => new ProductViewModel
-            // {
-            //    Title = x.Title,
-            //    Description = x.Description,
-            //    ImageUrl = x.ImageUrl,
-            //    Price = x.Price,
-            // }).ToList();
-
-
             var products = this.productsRepository.All();
 
             if (id.HasValue)
