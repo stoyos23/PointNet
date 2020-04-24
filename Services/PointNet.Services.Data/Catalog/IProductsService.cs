@@ -14,5 +14,7 @@
         public void AddNewProduct<T>(ProductViewModel viewModel);
 
         public ProductViewModel GetProductDetails(int id);
+
+        public IQueryable<T> GetProductsByName<T>(string productName);
     }
 }

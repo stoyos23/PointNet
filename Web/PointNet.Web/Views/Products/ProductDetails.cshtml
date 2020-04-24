@@ -43,7 +43,7 @@
                         <p class="lead font-weight-bold">Description</p>
 
                         <p>
-                            @Model.Description
+                            @Html.Raw(@Model.Description)
                         </p>
 
                         <form asp-controller="ShoppingCart" asp-action="AddNewProduct" class="d-flex justify-content-left">

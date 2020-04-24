@@ -78,5 +78,31 @@
 
             return model;
         }
+
+        public IQueryable<T> GetProductsByName<T>(string productName)
+        {
+            IQueryable<Product> products = null;
+
+            if (productName != null)
+            {
+                products = this.productsRepository.All().Where(x => x.Title.Contains(productName));
+
+                return products.To<T>();
+            }
+
+            return this.productsRepository.All().To<T>();
+        }
+
+        public void RemoveProduct(int productId)
+        {
+            if (productId != null)
+            {
+                var productToDelete = this.productsRepository.FindById(productId);
+                this.productsRepository.Delete(productToDelete);
+                this.productsRepository.SaveChangesAsync();
+            }
+
+            return;
+        }
     }
 }

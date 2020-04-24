@@ -49,7 +49,7 @@
 
         [HttpPost]
         public IActionResult AddNewProduct(ProductViewModel viewModel)
-          {
+        {
             if (this.ModelState.IsValid)
             {
                 this.productService.AddNewProduct<ProductViewModel>(viewModel);
@@ -59,6 +59,44 @@
             {
                 return this.View("AddNewProduct", viewModel);
             }
+        }
+
+        [HttpGet]
+        public IActionResult FindProducts()
+        {
+            var selectedProducts = this.productService.GetProductsByName<ProductViewModel>(null);
+
+            if (selectedProducts != null)
+            {
+                return this.View(selectedProducts.ToList());
+            }
+
+            return this.View();
+        }
+
+        [HttpPost]
+        public IActionResult FindProducts(string productName)
+        {
+            var selectedProducts = this.productService.GetProductsByName<ProductViewModel>(productName);
+
+            if (selectedProducts != null)
+            {
+                return this.View(selectedProducts.ToList());
+            }
+
+            return this.View();
+        }
+
+        public IActionResult RemoveProduct(int productId)
+        {
+            var model = new ProductViewModel();
+            model.AllCategories = this.categoriesService.AllCategories().Select(x => new SelectListItem()
+            {
+                Value = x.Id.ToString(),
+                Text = x.Name,
+            }).ToList();
+
+            return this.View("AddNewProduct", model);
         }
     }
 }

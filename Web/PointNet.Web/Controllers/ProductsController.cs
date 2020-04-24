@@ -27,7 +27,7 @@
         {
             var products = this.productService.GetProductsInSpecificCategory<ProductViewModel>(categoryId);
 
-            return this.View(await PaginatedList<ProductViewModel>.CreateAsync(products, page , 6));
+            return this.View(await PaginatedList<ProductViewModel>.CreateAsync(products, page, 6));
         }
 
 

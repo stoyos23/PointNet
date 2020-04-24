@@ -1,0 +1,46 @@
+﻿@using PointNet.Web.ViewModels.Catalog
+@model List<ProductViewModel>
+
+@{
+    ViewData["Title"] = "FindProducts";
+}
+
+<h1>RemoveProduct</h1>
+
+
+<form asp-controller="Dashboard" asp-action="FindProducts">
+    <p>
+        Search by title (contains word): <input type="text" name="ProductName">
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+@{
+    if (Model.Count != 0)
+    {
+        foreach (var product in Model)
+        {
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        <img class="img-thumbnail" src="@product.ImageUrl" />
+                    </div>
+                    <div class="col-md-6">
+                        @product.Title
+                    </div>
+                    <div class="col-md-3">
+                        <a asp-controller="Dashboard" asp-action="RemoveProduct" asp-route-productId="@product.Id"><button type="button" class="btn btn-danger btn-md" title="View More">Remove</button></a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+}
+
+<script>
+    function stringInputValue() {
+        var value = document.getElementById("search-string").value;
+
+        return value;
+    }
+</script>
