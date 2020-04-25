@@ -1,4 +1,6 @@
-﻿
+﻿@using PointNet.Web.ViewModels.Catalog
+@model ProductViewModel
+
 @{
     ViewData["Title"] = "_CommentsPartial";
 }
@@ -6,3 +8,17 @@
 <h1>_CommentsPartial</h1>
 
 
+@{
+    if (Model.Comments.Count() != null)
+    {
+        foreach (var comment in Model.Comments)
+        {
+            <li>
+                <p>
+                    @Html.Raw(@comment.Content)
+                </p>
+            </li>
+        }
+
+    }
+}

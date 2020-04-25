@@ -1,7 +1,7 @@
 ﻿namespace PointNet.Web.Areas.Administration.Controllers
 {
     using System.Linq;
-
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -48,11 +48,11 @@
         }
 
         [HttpPost]
-        public IActionResult AddNewProduct(ProductViewModel viewModel)
+        public async Task<IActionResult> AddNewProduct(ProductViewModel viewModel)
         {
             if (this.ModelState.IsValid)
             {
-                this.productService.AddNewProduct<ProductViewModel>(viewModel);
+                await this.productService.AddNewProductAsync<ProductViewModel>(viewModel);
                 return this.Redirect("/");
             }
             else
@@ -91,7 +91,7 @@
         {
             if(productId != null)
             {
-                this.productService.RemoveProduct(productId);
+                this.productService.RemoveProductAsync(productId);
             }
 
             return this.RedirectToAction("FindProducts");

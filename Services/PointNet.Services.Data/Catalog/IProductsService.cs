@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-
+    using System.Threading.Tasks;
     using PointNet.Data.Common.Models;
     using PointNet.Web.ViewModels.Catalog;
 
@@ -11,12 +11,14 @@
         // public AddNewProduct(string title, string description, string imageUrl, decimal price, int categoryId);
         IQueryable<T> GetProductsInSpecificCategory<T>(int? id);
 
-        public void AddNewProduct<T>(ProductViewModel viewModel);
+        public Task AddNewProductAsync<T>(ProductViewModel viewModel);
 
         public ProductViewModel GetProductDetails(int id);
 
         public IQueryable<T> GetProductsByName<T>(string productName);
 
-        public void RemoveProduct(int productId);
+        public Task RemoveProductAsync(int productId);
+
+        public Task AddCommentAsync(int productId, string commentContent, string userId);
     }
 }

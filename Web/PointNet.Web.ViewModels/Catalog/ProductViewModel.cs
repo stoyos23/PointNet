@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
     using System.Web;
 
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -37,5 +38,9 @@
         public int CategoryId { get; set; }
 
         public List<SelectListItem> AllCategories { get; set; }
+
+        public string CommentToAdd { get; set; }
+
+        public ICollection<Comment> Comments { get; set; }
     }
 }

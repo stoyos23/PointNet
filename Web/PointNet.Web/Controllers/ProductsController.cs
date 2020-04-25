@@ -1,5 +1,6 @@
 ﻿namespace PointNet.Web.Controllers
 {
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using PointNet.Data.Common.Models;
     using PointNet.Data.Common.Repositories;
@@ -15,11 +16,17 @@
     {
         private readonly IProductsService productService;
         private readonly IDeletableEntityRepository<Product> productRepository;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public ProductsController(IProductsService productService, IDeletableEntityRepository<Product> productRepository)
+        public ProductsController(
+            IProductsService productService,
+            IDeletableEntityRepository<Product> productRepository,
+            UserManager<ApplicationUser> userManager
+            )
         {
             this.productService = productService;
             this.productRepository = productRepository;
+            this.userManager = userManager;
         }
 
         // returns all products from from one category
@@ -35,6 +42,17 @@
         {
             var productDetails = this.productService.GetProductDetails(id);
             return this.View(productDetails);
+        }
+
+        public async Task<IActionResult> AddComment(int productId, ProductViewModel viewModel)
+        {
+            string commentContent = viewModel.CommentToAdd;
+
+            var currentUser = await userManager.GetUserAsync(this.HttpContext.User);
+
+            await this.productService.AddCommentAsync(productId, commentContent, currentUser.Id);
+    
+            return RedirectToAction("ProductDetails", new { id = productId });
         }
     }
 }

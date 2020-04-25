@@ -1,8 +1,9 @@
 ﻿namespace PointNet.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
-
+    using System.Threading.Tasks;
     using PointNet.Data.Common.Models;
     using PointNet.Data.Common.Repositories;
     using PointNet.Services.Mapping;
@@ -11,13 +12,18 @@
     public class ProductsService : IProductsService
     {
         private readonly IDeletableEntityRepository<Product> productsRepository;
+        private readonly IDeletableEntityRepository<Comment> commentsRepository;
 
-        public ProductsService(IDeletableEntityRepository<Product> productRepository)
+        public ProductsService(
+            IDeletableEntityRepository<Product> productRepository,
+            IDeletableEntityRepository<Comment> commentsRepository
+            )
         {
             this.productsRepository = productRepository;
+            this.commentsRepository = commentsRepository;
         }
 
-        public void AddNewProduct<T>(ProductViewModel viewModel)
+        public async Task AddNewProductAsync<T>(ProductViewModel viewModel)
         {
             Product product = new Product()
             {
@@ -28,8 +34,10 @@
                 ImageUrl = viewModel.ImageUrl,
                 CategoryId = viewModel.CategoryId,
             };
-            this.productsRepository.AddAsync(product);
-            this.productsRepository.SaveChangesAsync();
+            await this.productsRepository.AddAsync(product);
+
+            await this.productsRepository.SaveChangesAsync();
+
             return;
         }
 
@@ -47,7 +55,10 @@
 
         public ProductViewModel GetProductDetails(int id)
         {
+            ICollection<Comment> productComments = this.commentsRepository.All().Where(x => x.ProductId == id).ToList();
+
             var product = this.productsRepository.FindById(id);
+
             var model = new ProductViewModel
             {
                 Id = product.Id,
@@ -57,6 +68,7 @@
                 Quantity = product.Quantity,
                 ImageUrl = product.ImageUrl,
                 CategoryId = product.CategoryId,
+                Comments = productComments,
             };
 
             return model;
@@ -76,14 +88,33 @@
             return this.productsRepository.All().To<T>();
         }
 
-        public void RemoveProduct(int productId)
+        public async Task RemoveProductAsync(int productId)
         {
             if (productId != null)
             {
                 var productToDelete = this.productsRepository.FindById(productId);
+
                 this.productsRepository.Delete(productToDelete);
-                this.productsRepository.SaveChangesAsync();
+
+                await this.productsRepository.SaveChangesAsync();
             }
+
+            return;
+        }
+
+        public async Task AddCommentAsync(int productId, string commentContent, string userId)
+        {
+            
+            var newComment = new Comment
+            {
+                UserId = userId,
+                Content = commentContent,
+                ProductId = productId,
+            };
+
+            await this.commentsRepository.AddAsync(newComment);
+
+            await this.commentsRepository.SaveChangesAsync();
 
             return;
         }

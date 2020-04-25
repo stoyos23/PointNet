@@ -11,7 +11,7 @@ namespace PointNet.Web.Controllers
     public class CommentsController1 : Controller
     {
         // GET: /<controller>/
-        public IActionResult Index()
+        public IActionResult AddComment()
         {
             return View();
         }

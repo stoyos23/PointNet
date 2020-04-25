@@ -43,7 +43,7 @@
 
                         <form asp-controller="ShoppingCart" asp-action="AddNewProduct" class="d-flex justify-content-left">
                             <input asp-for="Quantity" type="number" value="1" onchange="isQuantityAvailable(@Model.Quantity);" id="inputQuantity" aria-label="Search" class="form-control" style="width: 100px">
-                            @if (User.Identity.IsAuthenticated) 
+                            @if (User.Identity.IsAuthenticated)
                             {
 
                                 <button asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@Model.Id" class="btn btn-primary btn-sm my-0 p" type="submit">
@@ -52,7 +52,7 @@
                             }
                             else //If user is not logged redirects to login page
                             {
-                                <button asp-area="Identity" asp-page="/Account/Login"  class="btn btn-primary btn-sm my-0 p" type="submit">
+                                <button asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary btn-sm my-0 p" type="submit">
                                     Add to cart
                                 </button>
                             }
@@ -93,6 +93,27 @@
 <h3>Comments</h3>
 
 <partial name="_CommentsPartial" />
+
+
+<script src="/lib/tinymce/tinymce.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea",
+        plugins: [
+            "image paste table link code media"
+        ]
+    });
+</script>
+
+<form asp-controller="Products" asp-action="AddComment" asp-route-productId="@Model.Id"  method="post">
+    <div>
+        <textarea asp-for="CommentToAdd" class="form-control" placeholder="Description"></textarea>
+        <span asp-validation-for="CommentToAdd" class="text-danger"></span>
+    </div>
+    <div class="modal-footer">
+        <input type="submit" class="btn btn-secondary" />
+    </div>
+</form>
 
 
 
