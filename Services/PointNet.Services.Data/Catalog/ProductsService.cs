@@ -4,23 +4,30 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using PointNet.Data.Common.Models;
     using PointNet.Data.Common.Repositories;
+    using PointNet.Data.Models;
     using PointNet.Services.Mapping;
     using PointNet.Web.ViewModels.Catalog;
+    using System.Security.Claims;
 
     public class ProductsService : IProductsService
     {
         private readonly IDeletableEntityRepository<Product> productsRepository;
         private readonly IDeletableEntityRepository<Comment> commentsRepository;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public ProductsService(
             IDeletableEntityRepository<Product> productRepository,
-            IDeletableEntityRepository<Comment> commentsRepository
+            IDeletableEntityRepository<Comment> commentsRepository,
+            UserManager<ApplicationUser> userManager
             )
         {
             this.productsRepository = productRepository;
             this.commentsRepository = commentsRepository;
+            this.userManager = userManager;
         }
 
         public async Task AddNewProductAsync<T>(ProductViewModel viewModel)
@@ -104,12 +111,14 @@
 
         public async Task AddCommentAsync(int productId, string commentContent, string userId)
         {
-            
+            var user = await this.userManager.FindByIdAsync(userId);
+
             var newComment = new Comment
             {
                 UserId = userId,
                 Content = commentContent,
                 ProductId = productId,
+                UserName = user.NormalizedUserName,
             };
 
             await this.commentsRepository.AddAsync(newComment);

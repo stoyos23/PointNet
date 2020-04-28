@@ -105,7 +105,10 @@
     });
 </script>
 
-<form asp-controller="Products" asp-action="AddComment" asp-route-productId="@Model.Id"  method="post">
+@if (User.Identity.IsAuthenticated)
+{
+
+<form asp-controller="Products" asp-action="AddComment" asp-route-productId="@Model.Id" method="post">
     <div>
         <textarea asp-for="CommentToAdd" class="form-control" placeholder="Description"></textarea>
         <span asp-validation-for="CommentToAdd" class="text-danger"></span>
@@ -114,6 +117,8 @@
         <input type="submit" class="btn btn-secondary" />
     </div>
 </form>
+
+}
 
 
 

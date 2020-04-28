@@ -65,7 +65,7 @@
         public async Task<IActionResult> AddToCart(int id, int quantity)
         {
             var user = await userManager.GetUserAsync(this.HttpContext.User);
-            this.shoppingCartService.AddToCart(id, user.Id, quantity);
+            await this.shoppingCartService.AddToCartAsync(id, user.Id, quantity);
 
             return this.RedirectToAction("Index");
         }
@@ -73,7 +73,7 @@
         public async Task<IActionResult> RemoveFromCart(int id)
         {
             var user = await userManager.GetUserAsync(this.HttpContext.User);
-            this.shoppingCartService.RemoveFromCart(id, user.Id);
+            await this.shoppingCartService.RemoveFromCartAsync(id, user.Id);
 
             return this.RedirectToAction("Index");
         }

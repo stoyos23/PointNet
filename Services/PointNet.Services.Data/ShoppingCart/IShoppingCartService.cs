@@ -12,20 +12,9 @@
     {
         public List<ShoppingCartItem> GetCart(string userId);
 
-        public void AddToCart(int productId, string userId, int quantity);
+        public Task AddToCartAsync(int productId, string userId, int quantity);
 
-        public void RemoveFromCart(int productId, string userId);
+        public Task RemoveFromCartAsync(int productId, string userId);
 
-        //public static ShoppingCart GetCart(IServiceProvider service);
-
-        //public List<ShoppingCartItem> GetShoppingCartItems();
-
-        //public void AddToCart(Product product, int amount);
-
-        //public decimal GetShoppingCartTotal();
-
-        //public int RemoveItemFromCart(Product product);
-
-        //public void ClearCart();
     }
 }

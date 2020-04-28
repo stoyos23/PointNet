@@ -18,28 +18,15 @@
 
     public class ShoppingCartService : IShoppingCartService
     {
-        private readonly IDeletableEntityRepository<ShoppingCartItem> shoppingCartItemRepository;
         private readonly IRepository<Product> productRepository;
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IDeletableEntityRepository<ShoppingCart> shoppingCartRepository;
         private readonly IDistributedCache distributedCache;
-        private readonly ShoppingCart shoppingCart;
 
         public ShoppingCartService(
-            IDeletableEntityRepository<ShoppingCartItem> shoppingCartItemRepository,
             IRepository<Product> productRepository,
-            UserManager<ApplicationUser> userManager,
-            IHttpContextAccessor httpContextAccessor,
-            IDeletableEntityRepository<ShoppingCart> shoppingCartRepository,
             IDistributedCache distributedCache
             )
         {
-            this.shoppingCartItemRepository = shoppingCartItemRepository;
             this.productRepository = productRepository;
-            this.userManager = userManager;
-            this.httpContextAccessor = httpContextAccessor;
-            this.shoppingCartRepository = shoppingCartRepository;
             this.distributedCache = distributedCache;
         }
 
@@ -57,10 +44,10 @@
             else
             {
                 return null;
-            }         
+            }
         }
 
-        public void AddToCart(int productId, string userId, int quantity)
+        public async Task AddToCartAsync(int productId, string userId, int quantity)
         {
             List<ShoppingCartItem> deserializedCartItems;
 
@@ -70,16 +57,16 @@
             {
                 var productsInUserCart = this.distributedCache.GetString(userId);
 
-                
 
-                if ((productToAdd.Quantity - quantity) < 0 )
+
+                if ((productToAdd.Quantity - quantity) < 0)
                 {
                     return;
                 }
                 else
                 {
                     productToAdd.Quantity = productToAdd.Quantity - quantity;
-                    productRepository.SaveChangesAsync();
+                    await this.productRepository.SaveChangesAsync();
                 }
 
                 var cartItem = new ShoppingCartItem
@@ -115,6 +102,7 @@
                     {
                         AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1),
                     });
+
                     return;
                 }
 
@@ -126,7 +114,7 @@
             }
         }
 
-        public void RemoveFromCart(int productId, string userId)
+        public async Task RemoveFromCartAsync(int productId, string userId)
         {
             var productsInUserCart = this.distributedCache.GetString(userId);
             var deserializedCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItem>>(productsInUserCart);
@@ -143,7 +131,7 @@
                 productRepository.FindById(productId).Quantity++;
             }
 
-            productRepository.SaveChangesAsync();
+            await this.productRepository.SaveChangesAsync();
 
             var serializeCartItems = JsonConvert.SerializeObject(deserializedCartItems);
 
@@ -151,6 +139,7 @@
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1),
             });
+
             return;
         }
     }

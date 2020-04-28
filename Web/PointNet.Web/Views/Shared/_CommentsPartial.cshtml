@@ -1,24 +1,41 @@
 ﻿@using PointNet.Web.ViewModels.Catalog
+
 @model ProductViewModel
+
 
 @{
     ViewData["Title"] = "_CommentsPartial";
 }
 
-<h1>_CommentsPartial</h1>
+<head>
+    <link
+</head>
 
 
 @{
-    if (Model.Comments.Count() != null)
+    if (Model.Comments.Count != null)
     {
         foreach (var comment in Model.Comments)
         {
-            <li>
-                <p>
-                    @Html.Raw(@comment.Content)
-                </p>
-            </li>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-info">@comment.UserName </h5>
+                    <p class="text-info">
+                        @comment.CreatedOn
+                    </p>
+                    <p class="card-text">
+                        <div class="list-group-item">
+                            @Html.Raw(comment.Content)
+                        </div>
+                    </p>
+                </div>
+            </div>
         }
-
     }
+
 }
+
+
+<hr class="hr-text" />
+
+<link href="~/css/productsViewPage.css" type="text/css" rel="stylesheet" />
