@@ -1,26 +1,16 @@
 ﻿namespace PointNet.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Session;
-    using Microsoft.Extensions.DependencyInjection;
-    using PointNet.Data;
+    using Microsoft.Extensions.Caching.Distributed;
     using PointNet.Data.Common.Models;
     using PointNet.Data.Common.Repositories;
     using PointNet.Data.Models;
-    using PointNet.Services.Data.SessionHelper;
     using PointNet.Services.Data.ShoppingCart;
     using PointNet.Web.ViewModels.ShoppingCart;
-    using Microsoft.EntityFrameworkCore;
-    using System.Security.Claims;
-    using Microsoft.Extensions.Caching.Distributed;
-    using Newtonsoft.Json;
 
     public class ShoppingCartController : Controller
     {
@@ -46,7 +36,7 @@
 
         public async Task<IActionResult> Index()
         {
-            var user = await userManager.GetUserAsync(this.HttpContext.User);
+            var user = await this.userManager.GetUserAsync(this.HttpContext.User);
             var shoppingCartItems = this.shoppingCartService.GetCart(user.Id);
             var shoppingCartViewModel = new ShoppingCartViewModel();
 
@@ -64,7 +54,7 @@
 
         public async Task<IActionResult> AddToCart(int id, int quantity)
         {
-            var user = await userManager.GetUserAsync(this.HttpContext.User);
+            var user = await this.userManager.GetUserAsync(this.HttpContext.User);
             await this.shoppingCartService.AddToCartAsync(id, user.Id, quantity);
 
             return this.RedirectToAction("Index");
@@ -72,7 +62,7 @@
 
         public async Task<IActionResult> RemoveFromCart(int id)
         {
-            var user = await userManager.GetUserAsync(this.HttpContext.User);
+            var user = await this.userManager.GetUserAsync(this.HttpContext.User);
             await this.shoppingCartService.RemoveFromCartAsync(id, user.Id);
 
             return this.RedirectToAction("Index");

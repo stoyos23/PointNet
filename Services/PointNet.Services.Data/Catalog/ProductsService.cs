@@ -1,17 +1,15 @@
 ﻿namespace PointNet.Services.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Http;
+
     using Microsoft.AspNetCore.Identity;
     using PointNet.Data.Common.Models;
     using PointNet.Data.Common.Repositories;
     using PointNet.Data.Models;
     using PointNet.Services.Mapping;
     using PointNet.Web.ViewModels.Catalog;
-    using System.Security.Claims;
 
     public class ProductsService : IProductsService
     {
@@ -22,8 +20,7 @@
         public ProductsService(
             IDeletableEntityRepository<Product> productRepository,
             IDeletableEntityRepository<Comment> commentsRepository,
-            UserManager<ApplicationUser> userManager
-            )
+            UserManager<ApplicationUser> userManager)
         {
             this.productsRepository = productRepository;
             this.commentsRepository = commentsRepository;

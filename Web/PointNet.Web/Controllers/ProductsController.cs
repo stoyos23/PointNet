@@ -1,5 +1,7 @@
 ﻿namespace PointNet.Web.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using PointNet.Data.Common.Models;
@@ -7,10 +9,6 @@
     using PointNet.Data.Models;
     using PointNet.Services.Data;
     using PointNet.Web.ViewModels.Catalog;
-    using ReflectionIT.Mvc.Paging;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class ProductsController : Controller
     {
@@ -21,8 +19,7 @@
         public ProductsController(
             IProductsService productService,
             IDeletableEntityRepository<Product> productRepository,
-            UserManager<ApplicationUser> userManager
-            )
+            UserManager<ApplicationUser> userManager)
         {
             this.productService = productService;
             this.productRepository = productRepository;
@@ -37,7 +34,6 @@
             return this.View(await PaginatedList<ProductViewModel>.CreateAsync(products, page, 6));
         }
 
-
         public IActionResult ProductDetails(int id)
         {
             var productDetails = this.productService.GetProductDetails(id);
@@ -48,11 +44,11 @@
         {
             string commentContent = viewModel.CommentToAdd;
 
-            var currentUser = await userManager.GetUserAsync(this.HttpContext.User);
+            var currentUser = await this.userManager.GetUserAsync(this.HttpContext.User);
 
             await this.productService.AddCommentAsync(productId, commentContent, currentUser.Id);
-    
-            return RedirectToAction("ProductDetails", new { id = productId });
+
+            return this.RedirectToAction("ProductDetails", new { id = productId });
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿namespace PointNet.Services.Data
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using PointNet.Data.Common.Models;
+
     using PointNet.Web.ViewModels.Catalog;
 
     public interface IProductsService

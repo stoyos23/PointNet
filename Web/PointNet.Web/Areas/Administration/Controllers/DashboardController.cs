@@ -2,13 +2,13 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using PointNet.Common;
     using PointNet.Services.Data;
     using PointNet.Services.Data.Catalog;
-    using PointNet.Web.ViewModels.Administration.Dashboard;
     using PointNet.Web.ViewModels.Catalog;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
@@ -89,7 +89,7 @@
 
         public IActionResult RemoveProduct(int productId)
         {
-            if(productId != null)
+            if (productId != null)
             {
                 this.productService.RemoveProductAsync(productId);
             }

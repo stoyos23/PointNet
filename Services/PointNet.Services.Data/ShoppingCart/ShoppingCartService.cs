@@ -3,14 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Claims;
-    using System.Text;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Caching.Distributed;
-    using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using PointNet.Data.Common.Models;
     using PointNet.Data.Common.Repositories;
@@ -23,8 +19,7 @@
 
         public ShoppingCartService(
             IRepository<Product> productRepository,
-            IDistributedCache distributedCache
-            )
+            IDistributedCache distributedCache)
         {
             this.productRepository = productRepository;
             this.distributedCache = distributedCache;
@@ -56,8 +51,6 @@
             if (productToAdd != null)
             {
                 var productsInUserCart = this.distributedCache.GetString(userId);
-
-
 
                 if ((productToAdd.Quantity - quantity) < 0)
                 {
@@ -123,12 +116,12 @@
             if (itemToRemove.Amount > 1)
             {
                 itemToRemove.Amount--;
-                productRepository.FindById(productId).Quantity++;
+                this.productRepository.FindById(productId).Quantity++;
             }
             else
             {
                 deserializedCartItems.Remove(itemToRemove);
-                productRepository.FindById(productId).Quantity++;
+                this.productRepository.FindById(productId).Quantity++;
             }
 
             await this.productRepository.SaveChangesAsync();

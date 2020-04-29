@@ -1,13 +1,9 @@
 ﻿namespace PointNet.Web.Controllers
 {
     using System.Diagnostics;
-    using System.Linq;
+
     using Microsoft.AspNetCore.Mvc;
-    using PointNet.Data.Common.Models;
-    using PointNet.Data.Common.Repositories;
     using PointNet.Web.ViewModels;
-    using PointNet.Web.ViewModels.Catalog;
-    using PointNet.Web.ViewModels.HomePage;
 
     public class HomeController : BaseController
     {

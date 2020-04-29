@@ -1,13 +1,9 @@
-﻿using PointNet.Data.Common.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PointNet.Data.Models
+﻿namespace PointNet.Data.Models
 {
+    using PointNet.Data.Common.Models;
+
     public class ShoppingCartItem : BaseDeletableModel<int>
     {
-
         public string Title { get; set; }
 
         public string ImageUrl { get; set; }
