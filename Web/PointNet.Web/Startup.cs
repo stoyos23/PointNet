@@ -23,6 +23,7 @@
     using PointNet.Services.Data.ShoppingCart;
     using PointNet.Services.Mapping;
     using PointNet.Services.Messaging;
+    using PointNet.Web.Hubs;
     using PointNet.Web.ViewModels;
     using ReflectionIT.Mvc.Paging;
 
@@ -59,6 +60,7 @@
             });
             services.AddSession();
 
+            services.AddSignalR();
             services.AddControllersWithViews(configure =>
             {
                 configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
@@ -125,6 +127,7 @@
             app.UseEndpoints(
                 endpoints =>
                     {
+                        endpoints.MapHub<ChatHub>("/chat");
                         endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();

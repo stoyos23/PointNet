@@ -14,24 +14,15 @@
 
     public class ShoppingCartController : Controller
     {
-        private readonly IDeletableEntityRepository<Product> productRepository;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IShoppingCartService shoppingCartService;
-        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IDistributedCache distributedCache;
 
         public ShoppingCartController(
-            IDeletableEntityRepository<Product> productRepository,
             UserManager<ApplicationUser> userManager,
-            IShoppingCartService shoppingCartService,
-            IHttpContextAccessor httpContextAccessor,
-            IDistributedCache distributedCache)
+            IShoppingCartService shoppingCartService)
         {
-            this.productRepository = productRepository;
             this.userManager = userManager;
             this.shoppingCartService = shoppingCartService;
-            this.httpContextAccessor = httpContextAccessor;
-            this.distributedCache = distributedCache;
         }
 
         public async Task<IActionResult> Index()

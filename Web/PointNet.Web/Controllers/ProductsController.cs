@@ -4,8 +4,6 @@
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using PointNet.Data.Common.Models;
-    using PointNet.Data.Common.Repositories;
     using PointNet.Data.Models;
     using PointNet.Services.Data;
     using PointNet.Web.ViewModels.Catalog;
@@ -13,16 +11,13 @@
     public class ProductsController : Controller
     {
         private readonly IProductsService productService;
-        private readonly IDeletableEntityRepository<Product> productRepository;
         private readonly UserManager<ApplicationUser> userManager;
 
         public ProductsController(
             IProductsService productService,
-            IDeletableEntityRepository<Product> productRepository,
             UserManager<ApplicationUser> userManager)
         {
             this.productService = productService;
-            this.productRepository = productRepository;
             this.userManager = userManager;
         }
 
