@@ -34,7 +34,16 @@
                     {
                         <tr>
                             <th class="text-center">
-                                <img src="@item.ImageUrl" class="shopping-cart-img img-fluid" alt="@item.Title">
+                                @{
+                                    if (item.ImageUrl == null)
+                                    {
+                                        <img class="shopping-cart-img img-fluid" src="~/uploads/@item.ImageName" />
+                                    }
+                                    else
+                                    {
+                                        <img class="shopping-cart-img img-fluid" src="@item.ImageUrl" />
+                                    }
+                                }
                             </th>
                             <td>@item.Title</td>
                             <td>$@item.Price</td>

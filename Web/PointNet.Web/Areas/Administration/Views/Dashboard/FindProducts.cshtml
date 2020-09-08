@@ -8,7 +8,7 @@
 <h1>RemoveProduct</h1>
 
 
-<form asp-controller="Dashboard" asp-action="FindProducts">
+<form style="margin-top:6%" asp-controller="Dashboard" asp-action="FindProducts">
     <p>
         Search by title (contains word): <input type="text" name="ProductName">
         <input type="submit" value="Filter" />
@@ -23,7 +23,16 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-3 text-center">
-                        <img class="img-thumbnail" src="@product.ImageUrl" />
+                        @{
+                            if (product.ImageUrl == null)
+                            {
+                                <img class="img-thumbnail" src="~/uploads/@product.ImageName" />
+                            }
+                            else
+                            {
+                                <img class="img-thumbnail" src="@product.ImageUrl" />
+                            }
+                        }
                     </div>
                     <div class="col-md-6">
                         @product.Title

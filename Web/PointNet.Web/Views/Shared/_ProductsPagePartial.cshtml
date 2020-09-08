@@ -36,7 +36,16 @@
                         <div class="col-md-4 product-grid">
                             <div class="image text-center">
                                 <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">
-                                    <img src="@product.ImageUrl" class="img-fluid">
+                                    @{
+                                        if (product.ImageUrl == null)
+                                        {
+                                            <img class="img-fluid" src="~/uploads/@product.ImageName" />
+                                        }
+                                        else
+                                        {
+                                            <img class="img-fluid" src="@product.ImageUrl" />
+                                        }
+                                    }
                                     <div class="overlay">
                                         <div class="detail">View Details</div>
                                     </div>

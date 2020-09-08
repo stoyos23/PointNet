@@ -3,11 +3,23 @@
     this.ViewData["Title"] = "Home Page";
 }
 
+@*<div class="text-center">
+        <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>*@
+
 <div class="text-center">
-    <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="ml5">
+        <span class="text-wrapper">
+            <span class="line line1"></span>
+            <span class="letters letters-left">Signal</span>
+            <span class="letters ampersand">&amp;</span>
+            <span class="letters letters-right">Noise</span>
+            <span class="line line2"></span>
+        </span>
+    </h1>
 </div>
 
 @*<distributed-cache name="my-distributed-cache-unique-key-101">
-    Time Inside Cache Tag Helper: @DateTime.UtcNow
-</distributed-cache>*@
+        Time Inside Cache Tag Helper: @DateTime.UtcNow
+    </distributed-cache>*@

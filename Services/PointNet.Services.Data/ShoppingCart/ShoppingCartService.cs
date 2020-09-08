@@ -67,6 +67,7 @@
                     Id = productToAdd.Id,
                     Title = productToAdd.Title,
                     ImageUrl = productToAdd.ImageUrl,
+                    ImageName = productToAdd.ImageName,
                     Price = productToAdd.Price,
                     Amount = quantity,
                 };

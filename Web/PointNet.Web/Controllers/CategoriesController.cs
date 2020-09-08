@@ -15,25 +15,21 @@
     using PointNet.Services.Mapping;
     using PointNet.Web.ViewModels.Catalog;
 
-    // TODO: Remove Db Context and replace with respositories
     public class CategoriesController : Controller
     {
-        private readonly IDeletableEntityRepository<Category> categoryRepository;
+        private readonly ICategoriesService categoryService;
 
         public CategoriesController(
-            IDeletableEntityRepository<Category> categoryRepository)
+            ICategoriesService categoryService)
         {
-            this.categoryRepository = categoryRepository;
+            this.categoryService = categoryService;
         }
 
         public IActionResult Index()
         {
-            var viewModel = new CatalogViewModel();
-
-            var categories = this.categoryRepository.All().To<CategoriesViewModel>();
-            viewModel.Categories = categories.ToList();
-
-            return this.View(viewModel);
+            var categories = this.categoryService.GetAllCategories();
+            
+            return this.View(categories);
         }
     }
 }

@@ -21,6 +21,7 @@
     using PointNet.Services.Data;
     using PointNet.Services.Data.Catalog;
     using PointNet.Services.Data.ShoppingCart;
+    using PointNet.Services.Data.User;
     using PointNet.Services.Mapping;
     using PointNet.Services.Messaging;
     using PointNet.Web.Hubs;
@@ -78,10 +79,10 @@
 
             // Application services
             services.AddTransient<IEmailSender>(x => new SendGridEmailSender("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"));
-            services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IShoppingCartService, ShoppingCartService>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

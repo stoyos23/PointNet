@@ -1,9 +1,12 @@
 ﻿namespace PointNet.Web.Areas.Administration.Controllers
 {
+    using System;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using PointNet.Common;
@@ -17,16 +20,16 @@
     {
         private readonly ICategoriesService categoriesService;
         private readonly IProductsService productService;
-        private readonly ISettingsService settingsService;
+        private readonly IHostingEnvironment hostingEnvironment;
 
         public DashboardController(
-            ISettingsService settingsService,
             ICategoriesService categoriesService,
-            IProductsService productService)
+            IProductsService productService,
+            IHostingEnvironment hostingEnvironment)
         {
             this.categoriesService = categoriesService;
             this.productService = productService;
-            this.settingsService = settingsService;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index()
@@ -38,7 +41,7 @@
         public IActionResult AddNewProduct()
         {
             var model = new ProductViewModel();
-            model.AllCategories = this.categoriesService.AllCategories().Select(x => new SelectListItem()
+            model.AllCategories = this.categoriesService.AllCategoriesList().Select(x => new SelectListItem()
             {
                 Value = x.Id.ToString(),
                 Text = x.Name,
@@ -50,8 +53,22 @@
         [HttpPost]
         public async Task<IActionResult> AddNewProduct(ProductViewModel viewModel)
         {
+            var uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+            var imgFile = viewModel.ImageFile;
+
             if (this.ModelState.IsValid)
             {
+                if (imgFile.Length > 0)
+                {
+                    var fileName = String.Concat(viewModel.Id.ToString(), imgFile.FileName);
+                    viewModel.ImageName = fileName;
+
+                    using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
+                    {
+                        await imgFile.CopyToAsync(fileStream);
+                    }
+                }
+
                 await this.productService.AddNewProductAsync<ProductViewModel>(viewModel);
                 return this.Redirect("/");
             }
@@ -87,11 +104,11 @@
             return this.View();
         }
 
-        public IActionResult RemoveProduct(int productId)
+        public async Task<IActionResult> RemoveProduct(int productId)
         {
-            if (productId != null)
+            if (productId > -1)
             {
-                this.productService.RemoveProductAsync(productId);
+                await this.productService.RemoveProductAsync(productId);
             }
 
             return this.RedirectToAction("FindProducts");

@@ -37,6 +37,7 @@
                 Quantity = viewModel.Quantity,
                 ImageUrl = viewModel.ImageUrl,
                 CategoryId = viewModel.CategoryId,
+                ImageName = viewModel.ImageName
             };
             await this.productsRepository.AddAsync(product);
 
@@ -71,6 +72,7 @@
                 Description = product.Description,
                 Quantity = product.Quantity,
                 ImageUrl = product.ImageUrl,
+                ImageName = product.ImageName,
                 CategoryId = product.CategoryId,
                 Comments = productComments,
             };

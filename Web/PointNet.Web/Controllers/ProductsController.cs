@@ -21,7 +21,7 @@
             this.userManager = userManager;
         }
 
-        // returns all products from from one category
+        // returns all products from the same category
         public async Task<IActionResult> Index(int categoryId, int page = 1)
         {
             var products = this.productService.GetProductsInSpecificCategory<ProductViewModel>(categoryId);

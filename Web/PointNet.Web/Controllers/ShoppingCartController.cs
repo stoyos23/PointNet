@@ -1,4 +1,4 @@
-﻿namespace PointNet.Web.Controllers
+﻿ namespace PointNet.Web.Controllers
 {
     using System.Threading.Tasks;
 

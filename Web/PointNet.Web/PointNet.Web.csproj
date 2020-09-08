@@ -49,4 +49,8 @@
     <ProjectReference Include="..\PointNet.Web.Infrastructure\PointNet.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\PointNet.Web.ViewModels\PointNet.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
 </Project>
