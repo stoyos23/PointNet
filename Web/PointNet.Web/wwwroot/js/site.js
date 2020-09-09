@@ -1,6 +1,4 @@
-﻿
-
-function isQuantityAvailable(availableQuantity) {
+﻿function isQuantityAvailable(availableQuantity) {
     var inputQuantity = document.getElementById("inputQuantity").value;
 
     if (inputQuantity > availableQuantity) {
@@ -9,9 +7,21 @@ function isQuantityAvailable(availableQuantity) {
             document.getElementById("overlay").style.display = "block";
         }
 }
-// Popup Close
+
 function popupClose() {
     document.getElementById("popup").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+/*Background Text JS*/
+$(function () {
+    $('.intro').addClass('go');
+
+    $('.reload').click(function () {
+        $('.intro').removeClass('go').delay(200).queue(function (next) {
+            $('.intro').addClass('go');
+            next();
+        });
+
+    });
+})

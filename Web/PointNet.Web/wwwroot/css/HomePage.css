@@ -1,0 +1,171 @@
+﻿﻿ /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-image: url(../uploads/0HomePage.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#footer {
+    background-color: white;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+
+
+/*Background Text CSS*/
+svg.intro {
+    max-width: 800px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+    svg.intro .text {
+        display: none;
+    }
+
+    svg.intro.go .text {
+        font-family: Arial, sans-serif;
+        font-size: 20px;
+        text-transform: uppercase;
+        display: block;
+    }
+
+    svg.intro.go .text-stroke {
+        fill: none;
+        stroke: #fff;
+        stroke-width: 2.8px;
+        stroke-dashoffset: -900;
+        stroke-dasharray: 900;
+        stroke-linecap: butt;
+        stroke-linejoin: round;
+        animation: dash 2.5s ease-in-out forwards;
+    }
+
+        svg.intro.go .text-stroke:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        svg.intro.go .text-stroke:nth-child(3) {
+            animation-delay: 0.9s;
+        }
+
+    svg.intro.go .text-stroke-2 {
+        stroke: #fff;
+        animation-delay: 1.2s;
+    }
+
+    svg.intro.go .text-stroke:nth-child(5) {
+        animation-delay: 1.5s;
+    }
+
+    svg.intro.go .text-stroke:nth-child(6) {
+        animation-delay: 1.8s;
+    }
+
+@keyframes dash {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+.reload {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: #fff;
+    border: none;
+    border-radius: 20px;
+    outline: none !important;
+    font-size: 11px;
+    line-height: 1.5;
+    padding: 8px 12px;
+    text-transform: uppercase;
+    z-index: 10;
+    cursor: pointer;
+    box-shadow: 0 6px 7px #350e4c;
+    transition: all 0.1s cubic-bezier(0.67, 0.13, 0.1, 0.81);
+}
+
+    .reload:hover {
+        box-shadow: 0 4px 4px #350e4c;
+        transform: translateY(1px);
+    }
+
+    .reload:active {
+        box-shadow: 0 1px 2px #244b94;
+        transform: translateY(2px);
+    }
+
+    .reload svg {
+        vertical-align: middle;
+        position: relative;
+        top: -2px;
+    }
